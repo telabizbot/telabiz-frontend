@@ -30,7 +30,7 @@ function App() {
   useEffect(() => {
     const initTelegram = async () => {
       try {
-        const [sdk] = await init();
+        const sdk = await init();
         const userData = sdk.initDataUnsafe?.user;
         setUser(userData);
         if (navigator.onLine) syncOfflineData();
