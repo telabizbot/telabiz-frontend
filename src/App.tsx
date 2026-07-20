@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { init } from '@telegram-apps/sdk';
 import { saveOfflineTransaction, syncOfflineData } from './services/offline';
 
 interface PreviewData {
@@ -30,8 +29,7 @@ function App() {
   useEffect(() => {
     const initTelegram = async () => {
       try {
-        const sdk = await init();
-        const userData = sdk.initDataUnsafe?.user;
+        const userData = (window as any).Telegram?.WebApp?.initDataUnsafe?.user;
         setUser(userData);
         if (navigator.onLine) syncOfflineData();
       } catch (e) {
