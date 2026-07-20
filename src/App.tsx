@@ -1,12 +1,23 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { init } from '@telegram-apps/sdk';
 import { saveOfflineTransaction, syncOfflineData } from './services/offline';
+
+interface PreviewData {
+  human_readable: string;
+  balance?: number;
+  status?: string;
+  client?: string;
+  product?: string;
+  total_amount?: number;
+  deposit?: number;
+  deadline?: string;
+}
 
 function App() {
   const [user, setUser] = useState<any>(null);
   const [view, setView] = useState('home');
   const [scratchpadText, setScratchpadText] = useState('');
-  const [preview, setPreview] = useState<{ human_readable: string; balance?: number; status?: string } | null>(null);
+  const [preview, setPreview] = useState<PreviewData | null>(null);
   const [productType, setProductType] = useState('Agbada');
   const [color, setColor] = useState('Blue');
   const [style, setStyle] = useState('Modern');
@@ -54,7 +65,14 @@ function App() {
         body: JSON.stringify({ text: scratchpadText }),
       });
       const result = await response.json();
-      setPreview(result);
+      setPreview({
+        ...result,
+        client: result.client || 'Unknown',
+        product: result.product || 'Unknown',
+        total_amount: result.total_amount || 0,
+        deposit: result.deposit || 0,
+        deadline: result.deadline || 'Not set'
+      });
     } catch (e) {
       await saveOfflineTransaction({ text: scratchpadText, timestamp: Date.now() });
       setPreview({ human_readable: 'Saved offline. Will sync when online.', status: 'offline' });
