@@ -16,12 +16,10 @@ function App() {
   const [prices, setPrices] = useState(null);
   const [products, setProducts] = useState([]);
   const [debts, setDebts] = useState([]);
-  const [analytics, setAnalytics] = useState({ revenue: 0, transactions: 0 });
   const [addingProduct, setAddingProduct] = useState(false);
   const [newProduct, setNewProduct] = useState({ name: '', price: '', description: '', category: 'Clothing', stock: 0 });
   const [loading, setLoading] = useState(true);
 
-  // ---------- INIT ----------
   useEffect(() => {
     const init = async () => {
       try {
@@ -53,25 +51,17 @@ function App() {
     init();
   }, []);
 
-  // ---------- FETCH DATA ----------
   useEffect(() => {
     if (!user) return;
-    
     const fetchData = async () => {
       try {
         const merchantId = user?.id || 'test';
-        
-        // Fetch products
         const productsRes = await fetch(`https://telabiz-backend.onrender.com/api/products?merchant_id=${merchantId}`);
         const productsData = await productsRes.json();
         setProducts(productsData.products || []);
-        
-        // Fetch debts
         const debtsRes = await fetch(`https://telabiz-backend.onrender.com/api/debts?merchant_id=${merchantId}`);
         const debtsData = await debtsRes.json();
         setDebts(debtsData.debts || []);
-        
-        // Fetch prices
         const pricesRes = await fetch('https://telabiz-backend.onrender.com/api/prices');
         const pricesData = await pricesRes.json();
         setPrices(pricesData);
@@ -79,11 +69,9 @@ function App() {
         console.log('Fetch error:', e);
       }
     };
-    
     fetchData();
   }, [user]);
 
-  // ---------- SCRATCHPAD ----------
   const handleParse = async () => {
     if (!scratchpadText.trim()) return;
     try {
@@ -118,7 +106,6 @@ function App() {
         alert('✅ Sale saved!');
         setPreview(null);
         setScratchpadText('');
-        // Refresh debts
         const debtsRes = await fetch(`https://telabiz-backend.onrender.com/api/debts?merchant_id=${user?.id || 'test'}`);
         const debtsData = await debtsRes.json();
         setDebts(debtsData.debts || []);
@@ -130,7 +117,6 @@ function App() {
     }
   };
 
-  // ---------- AI IMAGE GENERATION ----------
   const handleGenerate = async () => {
     setIsGenerating(true);
     try {
@@ -155,7 +141,6 @@ function App() {
     setIsGenerating(false);
   };
 
-  // ---------- PRODUCTS ----------
   const handleAddProduct = async () => {
     if (!newProduct.name || !newProduct.price) {
       alert('Please enter name and price.');
@@ -214,7 +199,6 @@ function App() {
     }
   };
 
-  // ---------- RENDER PRICING ----------
   const renderPricing = () => {
     if (!prices) return <p>Loading...</p>;
     return (
@@ -238,19 +222,15 @@ function App() {
     );
   };
 
-  // ---------- LOADING ----------
   if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Loading TelaBiz...</div>;
 
-  // ---------- RENDER ----------
   return (
     <div style={{ maxWidth: '480px', margin: '0 auto', padding: '16px', background: 'white', borderRadius: '16px', minHeight: '90vh' }}>
-      {/* Header */}
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
         <h1 style={{ margin: 0, fontSize: '22px' }}>🧵 TelaBiz</h1>
         <span style={{ background: '#e8f5e9', padding: '4px 12px', borderRadius: '20px', fontSize: '13px' }}>Today: ₦45,000</span>
       </div>
 
-      {/* Navigation */}
       <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
         {['Home','Storefront','Assistant','Studio','Pricing','Community','Debts','Help'].map(item => {
           const key = item.toLowerCase();
@@ -263,10 +243,7 @@ function App() {
         })}
       </div>
 
-      {/* Content */}
       <div>
-
-        {/* HOME */}
         {view === 'home' && (
           <div>
             <h2>Welcome, {user?.first_name || 'Merchant'}!</h2>
@@ -279,7 +256,6 @@ function App() {
           </div>
         )}
 
-        {/* STOREFRONT */}
         {view === 'storefront' && (
           <div>
             <h3>🟢 My Storefront</h3>
@@ -317,7 +293,6 @@ function App() {
           </div>
         )}
 
-        {/* ASSISTANT */}
         {view === 'assistant' && (
           <div>
             <h3>💼 Shop Assistant</h3>
@@ -339,7 +314,6 @@ function App() {
           </div>
         )}
 
-        {/* STUDIO */}
         {view === 'studio' && (
           <div>
             <h3>🎨 Visual Studio</h3>
@@ -416,21 +390,63 @@ function App() {
           </div>
         )}
 
-        {/* PRICING */}
         {view === 'pricing' && renderPricing()}
 
-        {/* COMMUNITY */}
         {view === 'community' && (
           <div>
             <h3>🌐 Community</h3>
-            <div style={{ padding: '12px', background: '#f5f5f5', borderRadius: '8px', marginBottom: '8px' }}
-              onClick={() => window.open('https://t.me/TelaBizChannel', '_blank')} style={{ cursor: 'pointer', padding: '12px', background: '#f5f5f5', borderRadius: '8px', marginBottom: '8px' }}>
+            <div style={{ padding: '12px', background: '#f5f5f5', borderRadius: '8px', marginBottom: '8px', cursor: 'pointer' }}
+              onClick={() => window.open('https://t.me/TelaBizChannel', '_blank')}>
               📢 @TelaBizChannel
             </div>
-            <div style={{ padding: '12px', background: '#f5f5f5', borderRadius: '8px', marginBottom: '8px' }}
-              onClick={() => window.open('https://t.me/TelaBizCommunity', '_blank')} style={{ cursor: 'pointer', padding: '12px', background: '#f5f5f5', borderRadius: '8px', marginBottom: '8px' }}>
+            <div style={{ padding: '12px', background: '#f5f5f5', borderRadius: '8px', marginBottom: '8px', cursor: 'pointer' }}
+              onClick={() => window.open('https://t.me/TelaBizCommunity', '_blank')}>
               💬 @TelaBizCommunity
             </div>
-            <div style={{ padding: '12px', background: '#f5f5f5', borderRadius: '8px', marginBottom: '8px' }}
-              onClick={() => window.open('https://t.me/TelaBizBuyers', '_blank')} style={{ cursor: 'pointer', padding: '12px', background: '#f5f5f5', borderRadius: '8px', marginBottom: '8px' }}>
-              �
+            <div style={{ padding: '12px', background: '#f5f5f5', borderRadius: '8px', marginBottom: '8px', cursor: 'pointer' }}
+              onClick={() => window.open('https://t.me/TelaBizBuyers', '_blank')}>
+              🛍️ @TelaBizBuyers
+            </div>
+            <p>Join 5,000+ merchants growing their business!</p>
+          </div>
+        )}
+
+        {view === 'debts' && (
+          <div>
+            <h3>💰 Debt Tracking</h3>
+            {debts.length === 0 ? (
+              <p>No outstanding debts. Great job! 🎉</p>
+            ) : (
+              debts.map((d) => (
+                <div key={d.id} style={{ borderBottom: '1px solid #eee', padding: '12px 0' }}>
+                  <strong>{d.customer_name}</strong> owes ₦{d.balance}
+                  <div style={{ fontSize: '13px', color: '#666' }}>Total: ₦{d.total_owed} • Paid: ₦{d.amount_paid}</div>
+                  <button className="btn-save" style={{ background: '#f57c00', fontSize: '12px', padding: '4px 10px', marginTop: '4px' }}>📤 Send Reminder</button>
+                </div>
+              ))
+            )}
+          </div>
+        )}
+
+        {view === 'help' && (
+          <div>
+            <h3>❓ Help</h3>
+            <p><strong>💲 Pricing:</strong> Free for 50 transactions/mo. Pro starts at ₦7,000/mo.</p>
+            <p><strong>📶 Offline:</strong> Works without internet. Syncs automatically.</p>
+            <p><strong>💳 Payments:</strong> Cards (Paystack) & Mobile Money (Flutterwave).</p>
+            <p><strong>🌐 Community:</strong> @TelaBizChannel | @TelaBizCommunity | @TelaBizBuyers</p>
+            <button className="btn-save" style={{ background: '#d32f2f' }}>🆘 Talk to Human</button>
+          </div>
+        )}
+      </div>
+
+      <style>{`
+        .btn-save { width: 100%; padding: 12px; background: #2e7d32; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 8px; }
+        .btn-save:active { opacity: 0.8; }
+        .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
+      `}</style>
+    </div>
+  );
+}
+
+export default App;
