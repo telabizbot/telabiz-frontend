@@ -13,7 +13,7 @@ function App() {
   const [customPrompt, setCustomPrompt] = useState('');
   const [generatedImage, setGeneratedImage] = useState('');
   const [isGenerating, setIsGenerating] = useState(false);
-  const [prices, setPrices] = useState(null);
+  const [prices, setPrices] = useState({ pro: { founder: 7000 }, business: { founder: 25000 } });
   const [products, setProducts] = useState([]);
   const [debts, setDebts] = useState([]);
   const [addingProduct, setAddingProduct] = useState(false);
@@ -64,7 +64,7 @@ function App() {
         setDebts(debtsData.debts || []);
         const pricesRes = await fetch('https://telabiz-backend.onrender.com/api/prices');
         const pricesData = await pricesRes.json();
-        setPrices(pricesData);
+        if (pricesData) setPrices(pricesData);
       } catch (e) {
         console.log('Fetch error:', e);
       }
@@ -175,7 +175,6 @@ function App() {
       alert('Error adding product.');
     }
   };
-
   const generatePaymentLink = async (productName, price) => {
     try {
       const res = await fetch('https://telabiz-backend.onrender.com/api/payment-link', {
@@ -197,29 +196,6 @@ function App() {
     } catch (e) {
       alert('Network error.');
     }
-  };
-
-  const renderPricing = () => {
-    if (!prices) return <p>Loading...</p>;
-    return (
-      <div>
-        <h3>💎 Pricing</h3>
-        <div style={{ border: '1px solid #ddd', padding: '16px', borderRadius: '8px', margin: '8px 0' }}>
-          <h4>Pro</h4>
-          <p>₦{prices.pro?.founder || 7000}/month</p>
-          <button className="btn-save" onClick={() => alert('Subscribe to Pro')}>🔒 Subscribe</button>
-        </div>
-        <div style={{ border: '1px solid #f57c00', padding: '16px', borderRadius: '8px', background: '#fff3e0' }}>
-          <h4>Business</h4>
-          <p>₦{prices.business?.founder || 25000}/month</p>
-          <button className="btn-save" style={{ background: '#f57c00' }} onClick={() => alert('Subscribe to Business')}>🔒 Subscribe</button>
-        </div>
-        <div style={{ marginTop: '12px', padding: '12px', background: '#e8f5e9', borderRadius: '8px' }}>
-          <h4>🆓 Free</h4>
-          <p>50 transactions/month • Basic AI images</p>
-        </div>
-      </div>
-    );
   };
 
   if (loading) return <div style={{ padding: '40px', textAlign: 'center' }}>Loading TelaBiz...</div>;
@@ -313,7 +289,6 @@ function App() {
             )}
           </div>
         )}
-
         {view === 'studio' && (
           <div>
             <h3>🎨 Visual Studio</h3>
@@ -390,7 +365,40 @@ function App() {
           </div>
         )}
 
-        {view === 'pricing' && renderPricing()}
+        {view === 'pricing' && (
+          <div>
+            <h3>💎 Pricing</h3>
+            <div style={{ border: '1px solid #ddd', padding: '16px', borderRadius: '8px', margin: '8px 0', background: 'white' }}>
+              <h4>🚀 Pro</h4>
+              <p style={{ fontSize: '24px', fontWeight: 'bold', margin: '8px 0' }}>₦{prices?.pro?.founder || 7000}<span style={{ fontSize: '14px', fontWeight: 'normal' }}>/month</span></p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '12px 0' }}>
+                <li style={{ padding: '4px 0' }}>✅ Unlimited transactions</li>
+                <li style={{ padding: '4px 0' }}>✅ Advanced AI images</li>
+                <li style={{ padding: '4px 0' }}>✅ Video loops</li>
+                <li style={{ padding: '4px 0' }}>✅ Analytics</li>
+              </ul>
+              <button className="btn-save" onClick={() => alert('Subscribe to Pro - Coming soon!')}>🔒 Subscribe</button>
+            </div>
+
+            <div style={{ border: '2px solid #f57c00', padding: '16px', borderRadius: '8px', margin: '8px 0', background: '#fff3e0' }}>
+              <h4>💼 Business</h4>
+              <p style={{ fontSize: '24px', fontWeight: 'bold', margin: '8px 0' }}>₦{prices?.business?.founder || 25000}<span style={{ fontSize: '14px', fontWeight: 'normal' }}>/month</span></p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: '12px 0' }}>
+                <li style={{ padding: '4px 0' }}>✅ Everything in Pro</li>
+                <li style={{ padding: '4px 0' }}>✅ Supplier marketplace</li>
+                <li style={{ padding: '4px 0' }}>✅ Team accounts</li>
+                <li style={{ padding: '4px 0' }}>✅ Custom branding</li>
+              </ul>
+              <button className="btn-save" style={{ background: '#f57c00' }} onClick={() => alert('Subscribe to Business - Coming soon!')}>🔒 Subscribe</button>
+            </div>
+
+            <div style={{ marginTop: '12px', padding: '16px', background: '#e8f5e9', borderRadius: '8px' }}>
+              <h4>🆓 Free</h4>
+              <p style={{ margin: '4px 0' }}>50 transactions/month • Basic AI images • Basic storefront</p>
+              <button className="btn-save" style={{ background: '#1976d2' }} onClick={() => alert('Free plan active!')}>Start Free</button>
+            </div>
+          </div>
+        )}
 
         {view === 'community' && (
           <div>
