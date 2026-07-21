@@ -175,6 +175,7 @@ function App() {
       alert('Error adding product.');
     }
   };
+
   const generatePaymentLink = async (productName, price) => {
     try {
       const res = await fetch('https://telabiz-backend.onrender.com/api/payment-link', {
@@ -289,6 +290,7 @@ function App() {
             )}
           </div>
         )}
+
         {view === 'studio' && (
           <div>
             <h3>🎨 Visual Studio</h3>
@@ -408,53 +410,4 @@ function App() {
               📢 @TelaBizChannel
             </div>
             <div style={{ padding: '12px', background: '#f5f5f5', borderRadius: '8px', marginBottom: '8px', cursor: 'pointer' }}
-              onClick={() => window.open('https://t.me/TelaBizCommunity', '_blank')}>
-              💬 @TelaBizCommunity
-            </div>
-            <div style={{ padding: '12px', background: '#f5f5f5', borderRadius: '8px', marginBottom: '8px', cursor: 'pointer' }}
-              onClick={() => window.open('https://t.me/TelaBizBuyers', '_blank')}>
-              🛍️ @TelaBizBuyers
-            </div>
-            <p>Join 5,000+ merchants growing their business!</p>
-          </div>
-        )}
-
-        {view === 'debts' && (
-          <div>
-            <h3>💰 Debt Tracking</h3>
-            {debts.length === 0 ? (
-              <p>No outstanding debts. Great job! 🎉</p>
-            ) : (
-              debts.map((d) => (
-                <div key={d.id} style={{ borderBottom: '1px solid #eee', padding: '12px 0' }}>
-                  <strong>{d.customer_name}</strong> owes ₦{d.balance}
-                  <div style={{ fontSize: '13px', color: '#666' }}>Total: ₦{d.total_owed} • Paid: ₦{d.amount_paid}</div>
-                  <button className="btn-save" style={{ background: '#f57c00', fontSize: '12px', padding: '4px 10px', marginTop: '4px' }}>📤 Send Reminder</button>
-                </div>
-              ))
-            )}
-          </div>
-        )}
-
-        {view === 'help' && (
-          <div>
-            <h3>❓ Help</h3>
-            <p><strong>💲 Pricing:</strong> Free for 50 transactions/mo. Pro starts at ₦7,000/mo.</p>
-            <p><strong>📶 Offline:</strong> Works without internet. Syncs automatically.</p>
-            <p><strong>💳 Payments:</strong> Cards (Paystack) & Mobile Money (Flutterwave).</p>
-            <p><strong>🌐 Community:</strong> @TelaBizChannel | @TelaBizCommunity | @TelaBizBuyers</p>
-            <button className="btn-save" style={{ background: '#d32f2f' }}>🆘 Talk to Human</button>
-          </div>
-        )}
-      </div>
-
-      <style>{`
-        .btn-save { width: 100%; padding: 12px; background: #2e7d32; color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: 600; cursor: pointer; margin-top: 8px; }
-        .btn-save:active { opacity: 0.8; }
-        .btn-save:disabled { opacity: 0.5; cursor: not-allowed; }
-      `}</style>
-    </div>
-  );
-}
-
-export default App;
+              onClick={() => window.open('http 
